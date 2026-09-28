@@ -1,0 +1,3 @@
+origem:   uno-sdd@0.1.0
+sha256:   9d885c2405cb24389c840e8c21a5cefb97126719ee211344d7569e42ed249be8
+adotado:  2026-09-25
