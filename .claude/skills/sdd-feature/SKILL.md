@@ -20,7 +20,7 @@ Ler antes de qualquer execução:
 1. `tasks/<NOME>/TASK.md` — **sempre; fonte de verdade principal**
 2. Todos `tasks/<NOME>/plans/PLAN-NN-*.md`
 3. `tasks/<NOME>/MEMORY.md`
-4. `tasks/<NOME>/QUESTION.md` (se existir) — decisões da Fase 3 (`QN.M`) e **incertezas abertas**. As incertezas apontadas ali como "resolver na execução" são responsabilidade desta fase; decisão registrada **não** se re-litiga
+4. `tasks/<NOME>/QUESTION.md` (se existir) — decisões da Fase 3 (`QN.M`) e **incertezas abertas**. As incertezas apontadas ali como "resolver na execução" são responsabilidade desta fase; decisão registrada **não** se re-litiga. **Se o cabeçalho diz `**Estado:** aguardando respostas`, a Fase 3 não fechou:** avisar a pessoa ("a Fase 3 não fechou: há N itens sem desfecho / respostas ainda sem aplicar") e **perguntar** se prossegue mesmo assim; nunca tratar `Sugestão` como decisão. Com `aplicado` ou formato legado (sem `**Protocolo:**`), seguir como de costume
 5. `tasks/<NOME>/EPIC.md` (se existir)
 
 **NUNCA inicie sem ter lido todos os PLANs.**

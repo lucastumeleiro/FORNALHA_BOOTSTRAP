@@ -26,7 +26,7 @@ TASK.md é sempre a fonte de verdade.
 ## Execução
 
 1. Invocar skill `sdd-feature` para regras de orquestração e template de prompt dos agentes
-2. Etapa 0: ler todos os PLANs em `tasks/<NOME>/plans/` + TASK + MEMORY.md + QUESTION.md (se existir — decisões `QN.M` da Fase 3 e incertezas abertas a resolver nesta fase)
+2. Etapa 0: ler todos os PLANs em `tasks/<NOME>/plans/` + TASK + MEMORY.md + QUESTION.md (se existir — decisões `QN.M` da Fase 3 e incertezas abertas a resolver nesta fase). Se o `QUESTION.md` diz `**Estado:** aguardando respostas`, a Fase 3 não fechou: **avisar a pessoa e perguntar** se prossegue mesmo assim; `Sugestão` nunca é decisão
 3. Etapa 1: construir grafo de dependências e agrupar em ondas (sequenciais); dentro de cada onda, PLANs sem dependência mútua rodam em paralelo
 4. Para cada onda (executar ondas em sequência — onda N só inicia após onda N-1 completa):
    - Atualizar MEMORY.md (marcar PLANs como 🔄 Em execução)

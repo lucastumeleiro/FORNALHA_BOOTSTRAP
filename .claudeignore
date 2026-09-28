@@ -4,3 +4,7 @@ coverage/
 package-lock.json
 .env
 .env.*
+
+# Uno SDD — worktrees por task e estado local do daemon
+.claude/worktrees/
+.claude/uno/

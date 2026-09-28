@@ -9,6 +9,24 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/sdd-summary.mjs"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Read(./.claude/worktrees/**)",
+      "Edit(./.claude/worktrees/**)",
+      "Write(./.claude/worktrees/**)"
     ]
   }
 }

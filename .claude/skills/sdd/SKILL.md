@@ -43,7 +43,7 @@ tasks/<NOME>/
 │   ├── PLAN-01-<slug>.md   # Fase 2 — plano unitário por domínio
 │   ├── PLAN-02-<slug>.md
 │   └── ...
-├── QUESTION.md   # Fase 3 — decisões da rodada de questionamento (IDs QN.M)
+├── QUESTION.md   # Fase 3 — perguntas (IDs QN.M) e respostas da rodada, gravadas na Etapa 1; decisões na Etapa 3
 ├── REVIEW.md     # Fase 5 — auditoria de regras (IDs de skill) + veredito + correções aplicadas
 ├── TEST.md       # Fase 6a — teste de mesa
 ├── AUTOTEST.md   # Fase 6b — decisões de classificação A/B/C + exclusões justificadas
@@ -58,7 +58,7 @@ tasks/<NOME>/
 
 - **1** `/spec` → `sdd-spec` → enriquece `TASK.md` via `task-analyst` _(pulável pela regra geral abaixo — o motivo de sempre é o `TASK.md` já ser detalhado o suficiente)_
 - **2** `/plan` → `sdd-plan` → `plans/PLAN-NN-*.md` + `MEMORY.md` (task com frontend: triagem visual — só _mudança estrutural_ aciona o gate de aprovação de layout via ferramenta de canvas/mockup)
-- **3** `/question` → `sdd-question` → crítica adversarial + discussão → `QUESTION.md` + ajustes acordados em `TASK.md`/`plans/` (escrita só na Etapa 3, com aprovação explícita)
+- **3** `/question` → `sdd-question` → crítica adversarial gravada em `QUESTION.md` (Etapa 1, que para) → respostas da pessoa no arquivo ou na tela → ajustes acordados em `TASK.md`/`plans/` (Etapa 3, com aprovação explícita na conversa do terminal). O `QUESTION.md` é também o meio de resposta; só ele é escrito antes da aprovação
 - **4** `/feature` → `sdd-feature` → código via sub-agentes paralelos por PLAN
 - **5** `/review-feature` → `reviewer-agent` → `REVIEW.md` (5.0 pré-passo determinístico → 5.1 auditoria de regras em sub-agentes independentes → 5.2 correções sob demanda)
 - **6a** `/test-plan` → `sdd-test-plan` → `TEST.md`
@@ -113,7 +113,7 @@ O carimbo é a **última ação da fase**, e só acontece quando a fase de fato 
 - **depois** de o artefato que prova o fechamento estar escrito em disco (`TASK.md` enriquecido, PLANs + `MEMORY.md`, `QUESTION.md`, `REVIEW.md`, `TEST.md`, `AUTOTEST.md`, `VERIFY.md`);
 - **antes** de avisar o usuário para revisar — o gate de aprovação não abre com a fase por carimbar.
 
-Fase que não fechou não carimba. A Fase 3, em particular, só carimba depois de a Etapa 3 **autorizada** ter escrito o `QUESTION.md` e os ajustes acordados; carimbar durante a discussão violaria o próprio gate que ela é.
+Fase que não fechou não carimba. A Fase 3, em particular: o `QUESTION.md` **já existe desde a Etapa 1** (é o meio da conversa), então a presença dele não prova o fechamento; ela só carimba depois de a Etapa 3 **autorizada** ter aplicado os ajustes acordados e deixado o `QUESTION.md` com `**Estado:** aplicado`; carimbar enquanto ele diz `aguardando respostas` violaria o próprio gate que ela é.
 
 ### `exit ≠ 0` impede fechar a fase
 
@@ -167,7 +167,7 @@ A norma operacional completa — os três limites de WIP (**3** tasks em fases f
 - Ler `tasks/<NOME>/TASK.md` por completo — **sempre a fonte de verdade principal**
 - Ler `tasks/<NOME>/EPIC.md` se existir (TASK tem prioridade em conflitos)
 - Ler artefatos adicionais conforme fase (PLANs, MEMORY, TEST — cada sub-skill define)
-- Ler `tasks/<NOME>/QUESTION.md` se existir (fases 4+) — decisões já tomadas na Fase 3 e incertezas ainda abertas. **Decisão registrada ali não se re-litiga**; incerteza aberta se resolve na execução
+- Ler `tasks/<NOME>/QUESTION.md` se existir (fases 4+) — decisões já tomadas na Fase 3 e incertezas ainda abertas. **Decisão registrada ali não se re-litiga**; incerteza aberta se resolve na execução. **Só vale como decisão com `**Estado:** aplicado`** (ou formato legado, sem `**Protocolo:**`).** Com `**Estado:** aguardando respostas`, a rodada **não fechou**: nada ali é decisão, a `Sugestão` não é acordo e as respostas dadas podem ainda mudar — as decisões só existem em `## Decisões`, depois da Etapa 3
 
 ### 0.2 Invocar skills relevantes PRIMEIRO
 
@@ -205,7 +205,7 @@ Toda fase que produz arquivo inclui seção `## Premissas e Incertezas` ao final
 
 Essa seção **alimenta Fase 3** (questionamento crítico). Seja honesto.
 
-> **Exceção — Fase 3 (`QUESTION.md`):** é a fase que **ataca** as premissas das outras, não que as declara. Usa o próprio formato (Resumo + Decisões + Incertezas abertas + Alterações aplicadas); a seção `## Incertezas abertas` cumpre o papel.
+> **Exceção — Fase 3 (`QUESTION.md`):** é a fase que **ataca** as premissas das outras, não que as declara. Usa o próprio formato, o do protocolo 2 (cabeçalho `**Protocolo:**`/`**Estado:**` + `## Itens`; Resumo, Decisões, Incertezas abertas e Alterações aplicadas entram na Etapa 3); a seção `## Incertezas abertas` cumpre o papel.
 >
 > **Exceção — Fase 5 (`REVIEW.md`):** relatório de auditoria com veredito, não declaração de premissas. Usa o próprio formato (pré-passo determinístico + reconciliação de regras + placar + bloqueantes + correções aplicadas).
 >
@@ -227,7 +227,7 @@ Essa seção **alimenta Fase 3** (questionamento crítico). Seja honesto.
 ## Regras Globais (valem em TODAS as fases)
 
 - **NUNCA** alterar arquivos do projeto fora de `tasks/<NOME>/` durante fases 1-3, 5, 6a, 7
-- **NUNCA** implementar código nas fases 1-3, 5, 6a, 7 (Fase 3 escreve `QUESTION.md` e ajusta `TASK.md`/`plans/` só na Etapa 3 aprovada; Fase 5 coordena correções via agentes; Fase 7 só escreve `VERIFY.md`)
+- **NUNCA** implementar código nas fases 1-3, 5, 6a, 7 (Fase 3 grava o `QUESTION.md` na Etapa 1 — a única escrita antes da aprovação — e ajusta `TASK.md`/`plans/` só na Etapa 3 aprovada, na conversa do terminal; Fase 5 coordena correções via agentes; Fase 7 só escreve `VERIFY.md`)
 - **NUNCA** pular fase sem registrar o motivo — e **nunca por decisão do agente**: `plan` e `feature` não são puláveis, e o pulo das demais é decisão humana (§Fases — visão geral)
 - **NUNCA** prosseguir com TASK ambíguo — parar e perguntar
 - **SEMPRE** registrar premissas e incertezas
