@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { WhatsappButton } from "@/components/whatsapp-button";
 import { heroContent } from "@/content/hero";
+import { hasWhatsappNumber } from "@/lib/whatsapp";
 
 export function Hero() {
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+
   return (
     <section className="py-16">
       <div className="mx-auto max-w-5xl px-4">
@@ -15,6 +19,13 @@ export function Hero() {
           <Button asChild size="lg">
             <a href={heroContent.cta.href}>{heroContent.cta.label}</a>
           </Button>
+          {hasWhatsappNumber(whatsappNumber) && (
+            <WhatsappButton
+              phone={whatsappNumber}
+              label={heroContent.whatsapp.label}
+              message={heroContent.whatsapp.message}
+            />
+          )}
         </div>
       </div>
     </section>
