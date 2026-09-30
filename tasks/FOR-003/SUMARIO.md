@@ -4,7 +4,7 @@ title: Preço em reais
 author: lucasftumeleiro@gmail.com
 status: not_started
 status_detail: nenhuma fase concluída
-updated_at: 2026-09-30T18:32:15Z
+updated_at: 2026-09-30T20:04:20Z
 phases:
   spec:
     status: skipped
@@ -28,13 +28,13 @@ phases:
     skipReason: teste
   verify:
     status: skipped
-    changedAt: 2026-09-28T17:55:38Z
-    skipReason: teste
+    changedAt: 2026-09-30T20:04:20Z
+    skipReason: dfsfds
 ---
 # FOR-003 — Preço em reais
 
 **Status:** not_started · nenhuma fase concluída
-**Atualizado em:** 2026-09-30T18:32:15Z
+**Atualizado em:** 2026-09-30T20:04:20Z
 
 | Fase | Status | Iniciado em | Alterado em | Veredito | Motivo |
 | --- | --- | --- | --- | --- | --- |
@@ -45,4 +45,4 @@ phases:
 | review | skipped | — | 2026-09-30T18:32:15Z | — | teste |
 | test-plan | skipped | — | 2026-09-28T17:55:27Z | — | teste |
 | autotest | skipped | — | 2026-09-28T17:55:31Z | — | teste |
-| verify | skipped | — | 2026-09-28T17:55:38Z | — | teste |
+| verify | skipped | — | 2026-09-30T20:04:20Z | — | dfsfds |
