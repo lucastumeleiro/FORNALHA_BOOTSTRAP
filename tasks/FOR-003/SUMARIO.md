@@ -4,7 +4,7 @@ title: Preço em reais
 author: lucasftumeleiro@gmail.com
 status: not_started
 status_detail: nenhuma fase concluída
-updated_at: 2026-09-30T18:15:43Z
+updated_at: 2026-09-30T20:04:20Z
 phases:
   spec:
     status: skipped
@@ -15,18 +15,26 @@ phases:
   feature:
     status: pending
   review:
-    status: pending
+    status: skipped
+    changedAt: 2026-09-30T18:32:15Z
+    skipReason: teste
   test-plan:
-    status: pending
+    status: skipped
+    changedAt: 2026-09-28T17:55:27Z
+    skipReason: teste
   autotest:
-    status: pending
+    status: skipped
+    changedAt: 2026-09-28T17:55:31Z
+    skipReason: teste
   verify:
-    status: pending
+    status: skipped
+    changedAt: 2026-09-30T20:04:20Z
+    skipReason: dfsfds
 ---
 # FOR-003 — Preço em reais
 
 **Status:** not_started · nenhuma fase concluída
-**Atualizado em:** 2026-09-30T18:15:43Z
+**Atualizado em:** 2026-09-30T20:04:20Z
 
 | Fase | Status | Iniciado em | Alterado em | Veredito | Motivo |
 | --- | --- | --- | --- | --- | --- |
@@ -34,7 +42,7 @@ phases:
 | plan | pending | — | — | — | — |
 | question | pending | — | — | — | — |
 | feature | pending | — | — | — | — |
-| review | pending | — | — | — | — |
-| test-plan | pending | — | — | — | — |
-| autotest | pending | — | — | — | — |
-| verify | pending | — | — | — | — |
+| review | skipped | — | 2026-09-30T18:32:15Z | — | teste |
+| test-plan | skipped | — | 2026-09-28T17:55:27Z | — | teste |
+| autotest | skipped | — | 2026-09-28T17:55:31Z | — | teste |
+| verify | skipped | — | 2026-09-30T20:04:20Z | — | dfsfds |

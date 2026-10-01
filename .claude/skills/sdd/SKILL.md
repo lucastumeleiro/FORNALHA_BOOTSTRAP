@@ -167,7 +167,7 @@ A norma operacional completa — os três limites de WIP (**3** tasks em fases f
 - Ler `tasks/<NOME>/TASK.md` por completo — **sempre a fonte de verdade principal**
 - Ler `tasks/<NOME>/EPIC.md` se existir (TASK tem prioridade em conflitos)
 - Ler artefatos adicionais conforme fase (PLANs, MEMORY, TEST — cada sub-skill define)
-- Ler `tasks/<NOME>/QUESTION.md` se existir (fases 4+) — decisões já tomadas na Fase 3 e incertezas ainda abertas. **Decisão registrada ali não se re-litiga**; incerteza aberta se resolve na execução. **Só vale como decisão com `**Estado:** aplicado`** (ou formato legado, sem `**Protocolo:**`).** Com `**Estado:** aguardando respostas`, a rodada **não fechou**: nada ali é decisão, a `Sugestão` não é acordo e as respostas dadas podem ainda mudar — as decisões só existem em `## Decisões`, depois da Etapa 3
+- Ler `tasks/<NOME>/QUESTION.md` se existir (fases 4+) — decisões já tomadas na Fase 3 e incertezas ainda abertas. **Decisão registrada ali não se re-litiga**; incerteza aberta se resolve na execução. **Só vale como decisão com `**Estado:** aplicado`** (ou formato legado, sem `**Protocolo:**`). Com `**Estado:** aguardando respostas`, a rodada **não fechou**: nada ali é decisão, a `Sugestão` não é acordo e as respostas dadas podem ainda mudar — as decisões só existem em `## Decisões`, depois da Etapa 3
 
 ### 0.2 Invocar skills relevantes PRIMEIRO
 

@@ -9,7 +9,7 @@ O cardápio mostra `R$ 12.50` e `R$ 28.00`, com ponto decimal, no formato americ
 ## Comportamento Esperado
 
 1. Função pura `formatPrice(value: number): string` em `src/lib/format-price.ts`, com `Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" })`.
-2. Componente `PriceTag` (`src/components/price-tag.tsx`) que mostra o preço formatado em destaque (`font-semibold`, `tabular-nums`).
+2. Componente `PriceTag` (`src/components/price-tag.tsx`) que mostra o preço formatado em destaque (`font-semibold`, `tabular-nums`) — peso visual maior que o `font-medium` atual é intencional, não decorrência da correção de locale (decisão da Fase 3, Q6.1).
 3. O `ProductCard` usa o `PriceTag`.
 
 ## Arquivos/Módulos Afetados
@@ -39,5 +39,5 @@ Produtos novos, preço promocional.
 
 **Incertezas**
 
-- I1 — Qual elemento o `PriceTag` renderiza: `<span>`, `<p>` ou `<data value="…">`.
-- I2 — Se o `Intl.NumberFormat` é criado uma vez no módulo ou a cada chamada.
+- I1 — ~~Qual elemento o `PriceTag` renderiza~~ — decidido: `<data value="…">` (Fase 3, Q2.1).
+- I2 — ~~Se o `Intl.NumberFormat` é criado uma vez no módulo ou a cada chamada~~ — decidido: escopo do módulo, confirmado (Fase 3, Q2.2).

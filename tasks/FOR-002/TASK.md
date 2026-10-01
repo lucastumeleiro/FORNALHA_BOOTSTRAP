@@ -37,5 +37,5 @@ Botão de WhatsApp (FOR-005), layout do hero.
 
 **Incertezas**
 
-- I1 — Qual fato sustenta melhor o título: as 36 horas de fermentação ou as fornadas das 7h e das 16h.
-- I2 — Se o CTA nomeia o destino ("Ver cardápio") ou chama para uma ação ("Escolher o pão").
+- ~~I1 — Qual fato sustenta melhor o título: as 36 horas de fermentação ou as fornadas das 7h e das 16h.~~ Resolvido na Fase 3 (Q2.1, Q2.2): título usa "fermentação natural de 36 horas"; subtítulo usa "farinha orgânica de moinho de pedra"; "fornadas às 7h e às 16h" fica livre para FOR-006. Ver QUESTION.md.
+- ~~I2 — Se o CTA nomeia o destino ("Ver cardápio") ou chama para uma ação ("Escolher o pão").~~ Resolvido na Fase 3 (Q2.1): CTA nomeia o destino, "Ver cardápio". Ver QUESTION.md.

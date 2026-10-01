@@ -1,3 +1,4 @@
+import { PriceTag } from "@/components/price-tag";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -27,7 +28,7 @@ export function ProductCard({ product, categoryLabel }: ProductCardProps) {
         <CardDescription>{product.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="font-medium">{`R$ ${product.price.toFixed(2)}`}</p>
+        <PriceTag value={product.price} />
       </CardContent>
     </Card>
   );

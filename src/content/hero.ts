@@ -1,5 +1,9 @@
 export const heroContent = {
-  title: "Bem-vindo à Fornalha",
-  subtitle: "Pães artesanais feitos com carinho.",
-  cta: { label: "Saiba mais", href: "#cardapio" },
+  title: "Fermentação natural de 36 horas",
+  subtitle: "Farinha orgânica de moinho de pedra.",
+  cta: { label: "Ver cardápio", href: "#cardapio" },
+  whatsapp: {
+    label: "Encomendar pelo WhatsApp",
+    message: "Olá, quero fazer uma encomenda.",
+  },
 } as const;

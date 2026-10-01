@@ -37,5 +37,5 @@ Fotos, produtos novos.
 
 **Incertezas**
 
-- I1 — Se a descrição do café coado pode citar origem ou torra, que o EPIC não menciona.
-- I2 — Se o subtítulo novo fala das fornadas (horário) ou da fermentação.
+- I1 — ~~Se a descrição do café coado pode citar origem ou torra, que o EPIC não menciona.~~ **Resolvida (Q3.1):** não cita origem nem torra; seria fato fora do EPIC.
+- I2 — ~~Se o subtítulo novo fala das fornadas (horário) ou da fermentação.~~ **Resolvida (Q3.2, Q5.1):** fala da fermentação, sem horário de fornada (a das 16h não existe no fim de semana) e sem repetir "36 horas", que já é o título do Hero.
