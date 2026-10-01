@@ -1,3 +1,4 @@
+import { FaqSection } from "@/sections/faq-section";
 import { Hero } from "@/sections/hero";
 import { HoursSection } from "@/sections/hours-section";
 import { ProductsSection } from "@/sections/products-section";
@@ -11,6 +12,7 @@ export default function App() {
       <main>
         <Hero />
         <ProductsSection />
+        <FaqSection />
         <HoursSection />
       </main>
       <SiteFooter />
