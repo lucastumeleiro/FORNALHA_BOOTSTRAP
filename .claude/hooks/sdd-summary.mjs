@@ -7660,16 +7660,51 @@ function validateVerdictProof(field, raw) {
     }
   };
 }
+function validateAwaitingHuman(field, raw, artifacts) {
+  if (!isPlainObject(raw)) {
+    return reject(field, "esperado objeto com anchor e values");
+  }
+  if (!isFilledString(raw.anchor)) {
+    return reject(`${field}.anchor`, "esperado texto n\xE3o vazio");
+  }
+  const values = raw.values;
+  if (!Array.isArray(values) || values.length === 0 || !values.every(isFilledString)) {
+    return reject(`${field}.values`, "esperado ao menos um texto n\xE3o vazio");
+  }
+  const [only] = artifacts;
+  if (artifacts.length !== 1 || only === PLAN_ARTIFACT_GLOB) {
+    return reject(
+      field,
+      "s\xF3 vale numa prova de um \xFAnico artefato, que n\xE3o seja o glob de PLANs"
+    );
+  }
+  return { ok: true, value: { anchor: raw.anchor, values } };
+}
+function validateArtifactsProof(field, raw) {
+  const artifacts = raw.artifacts;
+  if (!Array.isArray(artifacts) || artifacts.length === 0 || !artifacts.every(isArtifactPath)) {
+    return reject(`${field}.artifacts`, ARTIFACT_PATH_REASON);
+  }
+  if (raw.awaitingHuman === void 0) {
+    return { ok: true, value: { kind: "artifacts", artifacts } };
+  }
+  const awaitingHuman = validateAwaitingHuman(
+    `${field}.awaitingHuman`,
+    raw.awaitingHuman,
+    artifacts
+  );
+  if (!awaitingHuman.ok) return awaitingHuman;
+  return {
+    ok: true,
+    value: { kind: "artifacts", artifacts, awaitingHuman: awaitingHuman.value }
+  };
+}
 function validateCompletion(field, raw) {
   if (!isPlainObject(raw)) {
     return reject(field, "esperado objeto de prova de conclus\xE3o");
   }
   if (raw.kind === "artifacts") {
-    const artifacts = raw.artifacts;
-    if (!Array.isArray(artifacts) || artifacts.length === 0 || !artifacts.every(isArtifactPath)) {
-      return reject(`${field}.artifacts`, ARTIFACT_PATH_REASON);
-    }
-    return { ok: true, value: { kind: "artifacts", artifacts } };
+    return validateArtifactsProof(field, raw);
   }
   if (raw.kind === "plan_states" || raw.kind === "verdict") {
     if (!isArtifactPath(raw.artifact)) {
@@ -7876,7 +7911,11 @@ var DEFAULT_PHASE_CATALOG = [
     command: "/question",
     lane: "planning",
     highCost: false,
-    completion: { kind: "artifacts", artifacts: ["QUESTION.md"] },
+    completion: {
+      kind: "artifacts",
+      artifacts: ["QUESTION.md"],
+      awaitingHuman: { anchor: "Estado", values: ["aguardando respostas"] }
+    },
     prerequisites: [
       { kind: "plans", previousPhase: "plan" },
       { kind: "artifact", artifact: MEMORY_ARTIFACT, previousPhase: "plan" }
@@ -7902,7 +7941,7 @@ var DEFAULT_PHASE_CATALOG = [
     id: "review",
     label: "revis\xE3o",
     command: "/review-feature",
-    lane: "verification",
+    lane: "building",
     highCost: true,
     completion: {
       kind: "verdict",
@@ -8060,6 +8099,10 @@ function validatePhase(rawPhases, name) {
   if (!status.ok) {
     return reject2(`phases.${name}: ${status.reason}`);
   }
+  const startedAt = optionalString(raw, "startedAt");
+  if (!startedAt.ok) {
+    return reject2(`phases.${name}: ${startedAt.reason}`);
+  }
   const changedAt = optionalString(raw, "changedAt");
   if (!changedAt.ok) {
     return reject2(`phases.${name}: ${changedAt.reason}`);
@@ -8070,6 +8113,7 @@ function validatePhase(rawPhases, name) {
   }
   const {
     status: _status,
+    startedAt: _startedAt,
     changedAt: _changedAt,
     skipReason: _skipReason,
     ...rest
@@ -8078,6 +8122,7 @@ function validatePhase(rawPhases, name) {
     ok: true,
     value: {
       status: status.value,
+      ...startedAt.value !== void 0 ? { startedAt: startedAt.value } : {},
       ...changedAt.value !== void 0 ? { changedAt: changedAt.value } : {},
       ...skipReason.value !== void 0 ? { skipReason: skipReason.value } : {},
       ...rest
@@ -8333,6 +8378,25 @@ function parseVerdict(text, accepted) {
   const word = (matched[1] ?? "").match(/^[A-Z]+/)?.[0];
   return word !== void 0 && accepted.includes(word) ? word : void 0;
 }
+var HEADER_END_PATTERN = /^#{2,}\s/m;
+function readHeaderAnchor(text, label) {
+  const withoutBom = text.charCodeAt(0) === 65279 ? text.slice(1) : text;
+  const normalized = withoutBom.replace(/\r\n/g, "\n");
+  const headerEnd = normalized.search(HEADER_END_PATTERN);
+  const header = headerEnd === -1 ? normalized : normalized.slice(0, headerEnd);
+  const prefix = `**${label}:**`;
+  const line = header.split("\n").find((candidate) => candidate.startsWith(prefix));
+  return line === void 0 ? void 0 : line.slice(prefix.length).trim();
+}
+function normalizeHeaderValue(value) {
+  return value.replace(/^[\s*_`]+/, "").replace(/[\s.*_`]+$/, "").replace(/\s+/g, " ").toLowerCase();
+}
+function isAwaitingHuman(text, awaitingHuman) {
+  const value = readHeaderAnchor(text, awaitingHuman.anchor);
+  return value !== void 0 && awaitingHuman.values.some(
+    (candidate) => normalizeHeaderValue(candidate) === normalizeHeaderValue(value)
+  );
+}
 function extractSection(text, heading) {
   const start = text.indexOf(heading);
   if (start === -1) {
@@ -8496,11 +8560,12 @@ function escapeCell(value) {
   return value.replace(/\\/g, "\\\\").replace(/\|/g, "\\|");
 }
 function renderPhaseRow(name, entry) {
+  const startedAt = phaseField(entry, "startedAt") ?? "\u2014";
   const changedAt = phaseField(entry, "changedAt") ?? "\u2014";
   const verdict = phaseField(entry, "verdict") ?? "\u2014";
   const skipReason = phaseField(entry, "skipReason");
   const reason = skipReason === void 0 ? "\u2014" : escapeCell(skipReason);
-  return `| ${name} | ${entry.status} | ${changedAt} | ${verdict} | ${reason} |`;
+  return `| ${name} | ${entry.status} | ${startedAt} | ${changedAt} | ${verdict} | ${reason} |`;
 }
 function phaseNamesInRenderOrder(frontMatter, catalog) {
   const declared = phaseIdsInOrder(catalog).filter(
@@ -8521,8 +8586,8 @@ function renderBody(frontMatter, catalog) {
     statusLine,
     `**Atualizado em:** ${frontMatter.updated_at}`,
     "",
-    "| Fase | Status | Alterado em | Veredito | Motivo |",
-    "| --- | --- | --- | --- | --- |",
+    "| Fase | Status | Iniciado em | Alterado em | Veredito | Motivo |",
+    "| --- | --- | --- | --- | --- | --- |",
     rows,
     ""
   ].join("\n");
@@ -8571,7 +8636,10 @@ function stampsFromDefinition(params) {
     const complete = completion.artifacts.every(
       (artifact) => artifactExists(params.root, params.directory, artifact)
     );
-    return [{ phase, status: complete ? "done" : "in_progress" }];
+    const awaitingHuman = completion.awaitingHuman !== void 0 && isAwaitingHuman(text, completion.awaitingHuman);
+    return [
+      { phase, status: complete && !awaitingHuman ? "done" : "in_progress" }
+    ];
   }
   if (completion.kind === "plan_states") {
     if (completion.artifact !== writtenArtifact) {
@@ -8662,6 +8730,13 @@ function firstUnskippedFrom(phases, phaseIds, from) {
   }
   return void 0;
 }
+function waitingForHuman(phases, definition) {
+  const completion = definition.completion;
+  if (completion.kind !== "artifacts" || completion.awaitingHuman === void 0 || phaseEntryOf(phases, definition.id).status !== "in_progress") {
+    return void 0;
+  }
+  return completion.awaitingHuman.values[0];
+}
 function deriveSnapshot(phases, previous, catalog) {
   for (const definition of phasesWithRole(catalog, "gate_de_veredito")) {
     const entry = phaseEntryOf(phases, definition.id);
@@ -8673,7 +8748,12 @@ function deriveSnapshot(phases, previous, catalog) {
     }
   }
   const phaseIds = phaseIdsInOrder(catalog);
-  for (const [index, current] of phaseIds.entries()) {
+  for (const [index, definition] of catalog.entries()) {
+    const current = definition.id;
+    const waiting = waitingForHuman(phases, definition);
+    if (waiting !== void 0) {
+      return { status: "needs_you", detail: `${current} ${waiting}` };
+    }
     if (phaseEntryOf(phases, current).status !== "done") {
       continue;
     }
@@ -8746,6 +8826,7 @@ function applyStamps(frontMatter, stamps, timestamp, catalog, options) {
       }
       target.phases[stamp.phase] = {
         status: stamp.status,
+        ...stamp.status === "in_progress" ? { startedAt: timestamp } : {},
         ...stamp.verdict !== void 0 ? { verdict: stamp.verdict } : {},
         ...stamp.reason !== void 0 ? { skipReason: stamp.reason } : {},
         changedAt: timestamp
@@ -8766,6 +8847,7 @@ function applyStamps(frontMatter, stamps, timestamp, catalog, options) {
     entry.status = stamp.status;
     if (skipping) {
       delete entry.verdict;
+      delete entry.startedAt;
     } else {
       delete entry.skipReason;
     }
@@ -8774,6 +8856,13 @@ function applyStamps(frontMatter, stamps, timestamp, catalog, options) {
     }
     if (stamp.reason !== void 0) {
       entry.skipReason = stamp.reason;
+    }
+    if (stamp.status === "in_progress") {
+      if (entry.startedAt === void 0) {
+        entry.startedAt = timestamp;
+      }
+    } else if (stamp.status === "pending") {
+      delete entry.startedAt;
     }
     entry.changedAt = timestamp;
   }
