@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node 'F:\\Unobject\\FORNALHA_BOOTSTRAP\\.claude\\worktrees\\FOR-011\\.codex\\hooks\\sdd-summary.mjs'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node 'F:\\Unobject\\FORNALHA_BOOTSTRAP\\.claude\\worktrees\\FOR-011\\.codex\\hooks\\sdd-session-title.mjs'"
+          }
+        ]
+      }
+    ]
+  }
+}

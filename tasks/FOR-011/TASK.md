@@ -9,7 +9,7 @@ O rodapé diz "© 2025 Fornalha" fixo e não tem redes.
 ## Comportamento Esperado
 
 1. O ano é calculado na renderização: "© {ano} Fornalha".
-2. Links para o Instagram (`https://instagram.com/fornalha.padaria`) e para o WhatsApp (reusa `buildWhatsappUrl`, e some sem `.env`, como no hero), cada um com ícone do `lucide-react` quando houver um adequado e com `aria-label`.
+2. Links para o Instagram (`https://instagram.com/fornalha.padaria`) e para o WhatsApp (reusa `buildWhatsappUrl`, e some sem `.env`, como no hero), cada um só com texto (sem ícone) e com `aria-label` (decisão da Fase 3, Q1.2).
 3. O `id="contato"` continua no rodapé.
 
 ## Arquivos/Módulos Afetados
@@ -37,5 +37,7 @@ Newsletter, mapa.
 
 **Incertezas**
 
-- I1 — Se a mensagem pré-preenchida do WhatsApp no rodapé é a mesma do hero ou uma própria em `content/footer.ts`.
-- I2 — Qual ícone usar para o Instagram se o `lucide-react` desta versão não tiver o da marca: um genérico ou nenhum.
+- I1 — ~~Se a mensagem pré-preenchida do WhatsApp no rodapé é a mesma do hero ou uma própria.~~ **Decidida (Fase 3, Q2.2):** mensagem própria em `content/footer.ts`, "Olá, vim pelo site da Fornalha.".
+- I2 — ~~Qual ícone usar para o Instagram.~~ **Decidida (Fase 3, Q1.2, Q2.2):** `lucide-react` 1.48.0 não tem a marca; os links de Instagram e WhatsApp ficam só com texto, sem ícone.
+
+**Nota de processo (Q2.1):** a Fase 4 foi executada antes da Fase 3. Os ajustes de código e de teste decorrentes desta rodada (Q1.1, Q1.2, Q5.1) são feitos pela Fase 5 (`/review-feature`).
