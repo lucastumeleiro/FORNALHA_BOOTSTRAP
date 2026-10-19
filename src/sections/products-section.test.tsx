@@ -48,9 +48,11 @@ describe("ProductsSection", () => {
         screen.getByText(comoNaTela(formatPrice(product.price))),
       ).toBeInTheDocument();
     }
-    expect(screen.getAllByText("Pães")).toHaveLength(3);
-    expect(screen.getAllByText("Doces")).toHaveLength(2);
-    expect(screen.getAllByText("Bebidas")).toHaveLength(1);
+    // Só os badges dos cards: os botões de filtro repetem os mesmos rótulos.
+    const badge = { selector: '[data-slot="badge"]' };
+    expect(screen.getAllByText("Pães", badge)).toHaveLength(3);
+    expect(screen.getAllByText("Doces", badge)).toHaveLength(2);
+    expect(screen.getAllByText("Bebidas", badge)).toHaveLength(1);
   });
 
   it("deve mostrar os preços esperados quando o cardápio renderiza", () => {
